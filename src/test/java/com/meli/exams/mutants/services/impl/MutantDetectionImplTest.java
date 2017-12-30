@@ -40,8 +40,32 @@ public class MutantDetectionImplTest {
 	
 	@Test
 	public void testIsMutantGivenMutantDNA3() {
-		String[] mutantDNA = { "ATTTTAGGGG", "CAGGAGGCCAT", "ATGAATTAGT", "ACCGACTAGG", 
+		String[] mutantDNA = { "ATTTTAGGGG", "CAGGAGGCCA", "ATGAATTAGT", "ACCGACTAGG", 
 				"CTTCGGCCTA", "TCACTGAATT", "CTTCGGCCTA", "TCACTGAATT", "CTTCGGCCTA", "TCACTGAATT" };
+		boolean result = mutantDetection.isMutant(mutantDNA);
+		assertTrue(result);
+	}
+	
+	@Test
+	public void testIsMutantGivenMutantDNA4() {
+		String[] mutantDNA = { "ATGCGA", "CAGTGC", "TTATGT", "AGAAGG", 
+				"CTGCTA", "TCACTG" };
+		boolean result = mutantDetection.isMutant(mutantDNA);
+		assertTrue(result);
+	}
+	
+	@Test
+	public void testIsMutantGivenMutantDNA5() {
+		String[] mutantDNA = { "ATGCGA", "CAGGCC", "TTATGT", 
+				"AGAAGG", "CTGCTA", "TCACTG" };
+		boolean result = mutantDetection.isMutant(mutantDNA);
+		assertTrue(result);
+	}
+	
+	@Test
+	public void testIsMutantGivenMutantDNA6() {
+		String[] mutantDNA = { "ATGCGA", "CAGGTC", "TTATGT", 
+				"AGTCGG", "CTGCTA", "TCACTG" };
 		boolean result = mutantDetection.isMutant(mutantDNA);
 		assertTrue(result);
 	}
@@ -54,20 +78,18 @@ public class MutantDetectionImplTest {
 		assertFalse(result);
 	}
 	
-	@Test
+	@Test(expected = IllegalArgumentException.class)
 	public void testIsMutantGivenInvalidDNA1() {
 		String[] mutantDNA = { "ATTTTAGGGG", "CAGGAGGCCAT", "ATGAATTAGT", "ACCGACTAGG", 
 				"CTTCGGCCTA", "TCACTGAATT", "CTTCGGC", "TCACTGAATT", "CTTCGGCCTA", "TCACTGAATT" };
-		boolean result = mutantDetection.isMutant(mutantDNA);
-		assertFalse(result);
+		mutantDetection.isMutant(mutantDNA);
 	}
 	
-	@Test
+	@Test(expected = IllegalArgumentException.class)
 	public void testIsMutantGivenInvalidDNA2() {
 		String[] mutantDNA = { "ATTTTAGGGG", "CAGGAGGCCAT", "ATGAATTAGT", "ACCGACTAGG", 
 				"CTTCGGCCTA", "TCACTGAATT", "CTTCGGC", "TCACTGAATT" };
-		boolean result = mutantDetection.isMutant(mutantDNA);
-		assertFalse(result);
+		mutantDetection.isMutant(mutantDNA);
 	}
 	
 //	@Test
