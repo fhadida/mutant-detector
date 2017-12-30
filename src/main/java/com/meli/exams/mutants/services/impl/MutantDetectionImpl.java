@@ -19,9 +19,10 @@ public class MutantDetectionImpl implements MutantDetection {
 			}
 			dnaMat[i] = dna[i].toCharArray();
 		}
-		char candidateH,
-			candidateV,
-			candidateD1,
+		char 
+			candidateH = dnaMat[0][0],
+			candidateV = dnaMat[0][0],
+			candidateD1 = dnaMat[0][0],
 			candidateD2 = dnaMat[0][0];
 		
 		int count = 0;
@@ -29,7 +30,15 @@ public class MutantDetectionImpl implements MutantDetection {
 		if (!isValid) return false;
 		for (int i = 0; i < dnaMat.length; i++) {
 			for (int j = 0; j < dnaMat[i].length; j++) {
-				
+				if (candidateH == dnaMat[i][j]) {
+					count++;
+					if (count == 4) {
+						detectionCount++;
+					}
+				} else {
+					count = 0;
+					candidateH = dnaMat[i][j];
+				}
 			}
 		}
 		return false;
