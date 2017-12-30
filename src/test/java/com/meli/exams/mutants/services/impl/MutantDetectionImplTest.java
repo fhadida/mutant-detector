@@ -1,6 +1,10 @@
 package com.meli.exams.mutants.services.impl;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.junit.After;
 import org.junit.Before;
@@ -19,7 +23,7 @@ public class MutantDetectionImplTest {
 	}
 
 	@Test
-	public void testIsMutantGivenMutantDNA() {
+	public void testIsMutantGivenMutantDNA1() {
 		String[] mutantDNA = { "ATGCGA", "CAGTGC", "TTATGT", "AGAAGG", 
 				"CCCCTA", "TCACTG" };
 		boolean result = mutantDetection.isMutant(mutantDNA);
@@ -27,11 +31,43 @@ public class MutantDetectionImplTest {
 	}
 	
 	@Test
-	public void testIsMutantGivenHumanDNA() {
+	public void testIsMutantGivenMutantDNA2() {
+		String[] mutantDNA = { "ATTTTA", "CAGGGG", "AAAAGT", "AGAAGG", 
+				"CCCCTA", "TCACTG" };
+		boolean result = mutantDetection.isMutant(mutantDNA);
+		assertTrue(result);
+	}
+	
+	@Test
+	public void testIsMutantGivenMutantDNA3() {
+		String[] mutantDNA = { "ATTTTAGGGG", "CAGGAGGCCAT", "ATGAATTAGT", "ACCGACTAGG", 
+				"CTTCGGCCTA", "TCACTGAATT", "CTTCGGCCTA", "TCACTGAATT", "CTTCGGCCTA", "TCACTGAATT" };
+		boolean result = mutantDetection.isMutant(mutantDNA);
+		assertTrue(result);
+	}
+	
+	@Test
+	public void testIsMutantGivenNonMutantDNA1() {
 		String[] mutantDNA = { "ATGCGA", "CAGTGC", "TTATTT", "AGACGG", 
 				"GCGTCA", "TCACTG" };
 		boolean result = mutantDetection.isMutant(mutantDNA);
 		assertFalse(result);
+	}
+	
+//	@Test
+	public void testRegex() {
+		final String regex = "(A{4,}|T{4,}|C{4,}|G{4,})";
+		final String string = "CAAAATGGGGTAAAATT";
+
+		final Pattern pattern = Pattern.compile(regex);
+		final Matcher matcher = pattern.matcher(string);
+
+		while (matcher.find()) {
+		    System.out.println("Full match: " + matcher.group(0));
+		    for (int i = 1; i <= matcher.groupCount(); i++) {
+		        System.out.println("Group " + i + ": " + matcher.group(i));
+		    }
+		}
 	}
 
 }
