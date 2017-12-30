@@ -18,7 +18,7 @@ public class MutantDetectionImpl implements MutantDetection {
 		boolean isValid = true;
 		int count = 0;
 		for (int i = 0; i < dna.length && count < 2; i++) {
-			if (dna[i].length() != dna.length && !dna[i].matches("[ATCG]*")) {
+			if (dna[i].length() != dna.length || !dna[i].matches("[ATCG]*")) {
 				isValid = false;
 				LOG.severe("Invalid DNA");
 				break;

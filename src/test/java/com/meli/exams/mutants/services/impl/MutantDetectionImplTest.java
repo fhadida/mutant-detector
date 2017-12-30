@@ -54,6 +54,22 @@ public class MutantDetectionImplTest {
 		assertFalse(result);
 	}
 	
+	@Test
+	public void testIsMutantGivenInvalidDNA1() {
+		String[] mutantDNA = { "ATTTTAGGGG", "CAGGAGGCCAT", "ATGAATTAGT", "ACCGACTAGG", 
+				"CTTCGGCCTA", "TCACTGAATT", "CTTCGGC", "TCACTGAATT", "CTTCGGCCTA", "TCACTGAATT" };
+		boolean result = mutantDetection.isMutant(mutantDNA);
+		assertFalse(result);
+	}
+	
+	@Test
+	public void testIsMutantGivenInvalidDNA2() {
+		String[] mutantDNA = { "ATTTTAGGGG", "CAGGAGGCCAT", "ATGAATTAGT", "ACCGACTAGG", 
+				"CTTCGGCCTA", "TCACTGAATT", "CTTCGGC", "TCACTGAATT" };
+		boolean result = mutantDetection.isMutant(mutantDNA);
+		assertFalse(result);
+	}
+	
 //	@Test
 	public void testRegex() {
 		final String regex = "(A{4,}|T{4,}|C{4,}|G{4,})";
