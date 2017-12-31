@@ -1,7 +1,5 @@
 package com.meli.exams.mutants.services.impl;
 
-import java.util.Arrays;
-import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -9,8 +7,6 @@ import com.meli.exams.mutants.services.MutantDetection;
 
 public class MutantDetectionImpl implements MutantDetection {
 
-	private static final Logger LOG = Logger.getLogger(MutantDetectionImpl.class.getName());
-	
 	private static final String MUTANT_REGEX = "(A{4,}|T{4,}|C{4,}|G{4,})";
 	private static final Pattern MUTANT_PATTERN = Pattern.compile(MUTANT_REGEX);
 	private static final int MUTANT_THRESHOLD = 2;
@@ -18,6 +14,8 @@ public class MutantDetectionImpl implements MutantDetection {
 	
 	public boolean isMutant(String[] dna) {
 		validateDNA(dna);
+		if (dna.length < MIN_REPETITIONS)
+			return false;
 		int count = searchMutant(dna);
 		if (count >= MUTANT_THRESHOLD)
 			return true;
@@ -113,6 +111,9 @@ public class MutantDetectionImpl implements MutantDetection {
 	}
 
 	private static void validateDNA(String[] dna) throws IllegalArgumentException {
+		if (dna == null) {
+			throw new IllegalArgumentException("Invalid DNA");
+		}
 		for (String s : dna) {
 			if (s.length() != dna.length || !s.matches("[ATCG]*")) {
 				throw new IllegalArgumentException("Invalid DNA");

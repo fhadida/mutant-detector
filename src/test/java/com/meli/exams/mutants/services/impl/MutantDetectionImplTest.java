@@ -1,9 +1,7 @@
 package com.meli.exams.mutants.services.impl;
 
-import static org.junit.Assert.*;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.After;
 import org.junit.Before;
@@ -86,6 +84,20 @@ public class MutantDetectionImplTest {
 		assertFalse(result);
 	}
 	
+	@Test
+	public void testIsMutantGivenNonMutantDNA2() {
+		String[] mutantDNA = { "ATG", "CAG", "TTA" };
+		boolean result = mutantDetection.isMutant(mutantDNA);
+		assertFalse(result);
+	}
+	
+	@Test
+	public void testIsMutantGivenNonMutantDNA3() {
+		String[] mutantDNA = { "A" };
+		boolean result = mutantDetection.isMutant(mutantDNA);
+		assertFalse(result);
+	}
+	
 	@Test(expected = IllegalArgumentException.class)
 	public void testIsMutantGivenInvalidDNA1() {
 		String[] mutantDNA = { "ATTTTAGGGG", "CAGGAGGCCAT", "ATGAATTAGT", "ACCGACTAGG", 
@@ -105,6 +117,13 @@ public class MutantDetectionImplTest {
 		String[] mutantDNA = { "ATTTT", "CARGT", "ATWAA", 
 				"CTTCG", "TCACT" };
 		mutantDetection.isMutant(mutantDNA);
+	}
+	
+	@Test(expected = IllegalArgumentException.class)
+	public void testIsMutantGivenInvalidDNA4() {
+		String[] mutantDNA = null;
+		boolean result = mutantDetection.isMutant(mutantDNA);
+		assertFalse(result);
 	}
 
 }
