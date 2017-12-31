@@ -1,44 +1,58 @@
 package com.meli.exams.mutants.services.impl;
 
+import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.meli.exams.mutants.services.MutantDetectionService;
 
 @Service
 public class MutantDetectionServiceImpl implements MutantDetectionService {
+	
+	private static final Logger LOG = LoggerFactory.getLogger(MutantDetectionServiceImpl.class);
 
-	private static final String MUTANT_REGEX = "(A{4,}|T{4,}|C{4,}|G{4,})";
+	private static final String MUTANT_REGEX = "(A{4}|T{4}|C{4}|G{4})";
 	private static final Pattern MUTANT_PATTERN = Pattern.compile(MUTANT_REGEX);
 	private static final int MUTANT_THRESHOLD = 2;
 	private static final int MIN_REPETITIONS = 4;
 	
 	public boolean isMutant(String[] dna) {
 		validateDNA(dna);
-		if (dna.length < MIN_REPETITIONS)
+		LOG.debug("DNA to analyze: " + Arrays.toString(dna));
+		if (dna.length < MIN_REPETITIONS) {
+			LOG.debug("Not a Mutant.");
 			return false;
+		}
 		int count = searchMutant(dna);
-		if (count >= MUTANT_THRESHOLD)
+		if (count >= MUTANT_THRESHOLD) {
+			LOG.debug("It's a Mutant!");
 			return true;
-		else {
+		} else {
 			final String[] dna_t = transpose(dna);
 			count += searchMutant(dna_t);
-			if (count >= MUTANT_THRESHOLD)
+			if (count >= MUTANT_THRESHOLD) {
+				LOG.debug("It's a Mutant!");
 				return true;
-			else {
+			} else {
 				final String[] dna_d1 = diagTopRightBotomLeft(dna);
 				count += searchMutant(dna_d1);
-				if (count >= MUTANT_THRESHOLD)
+				if (count >= MUTANT_THRESHOLD) {
+					LOG.debug("It's a Mutant!");
 					return true;
-				else {
+				} else {
 					final String[] dna_d2 = diagTopLeftBotomRight(dna);
 					count += searchMutant(dna_d2);
-					if (count >= MUTANT_THRESHOLD)
+					if (count >= MUTANT_THRESHOLD) {
+						LOG.debug("It's a Mutant!");
 						return true;
-					else
+					} else {
+						LOG.debug("Not a Mutant.");
 						return false;
+					}
 				}
 			}
 		}
@@ -108,18 +122,29 @@ public class MutantDetectionServiceImpl implements MutantDetectionService {
 			final Matcher mutantMatcher = MUTANT_PATTERN.matcher(dna[i]);
 			while (mutantMatcher.find()) {
 				count++;
+				LOG.debug(String.format("The pattern '%s' was found. Chance of Mutant's DNA!", mutantMatcher.group(0)));
 			}
 		}
 		return count;
 	}
 
 	private static void validateDNA(String[] dna) throws IllegalArgumentException {
+		String mssg = null;
 		if (dna == null) {
-			throw new IllegalArgumentException("Invalid DNA");
+			mssg = "Invalid DNA: Can't analyze null DNA.";
+			LOG.error(mssg);
+			throw new IllegalArgumentException(mssg);
 		}
 		for (String s : dna) {
-			if (s.length() != dna.length || !s.matches("[ATCG]*")) {
-				throw new IllegalArgumentException("Invalid DNA");
+			if (s.length() != dna.length) {
+				mssg = "Invalid DNA: DNA size must be NxN.";
+				LOG.error(mssg);
+				throw new IllegalArgumentException(mssg);
+			}
+			if (!s.matches("[ATCG]*")) {
+				mssg = "Invalid DNA: Does not match '[ATCG]*' pattern.";
+				LOG.error(mssg);
+				throw new IllegalArgumentException(mssg);
 			}
 		}
 		

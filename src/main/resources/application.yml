@@ -1,0 +1,4 @@
+logging:
+  level:
+    org.springframewok.web: ERROR
+    com.meli.exams.mutants: DEBUG
