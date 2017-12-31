@@ -7,9 +7,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-public class MutantDetectionImplTest {
+public class MutantDetectionServiceImplTest {
 	
-	private MutantDetectionImpl mutantDetection = new MutantDetectionImpl();
+	private MutantDetectionServiceImpl mutantDetection = new MutantDetectionServiceImpl();
 
 	@Before
 	public void setUp() throws Exception {

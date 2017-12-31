@@ -3,9 +3,12 @@ package com.meli.exams.mutants.services.impl;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.meli.exams.mutants.services.MutantDetection;
+import org.springframework.stereotype.Service;
 
-public class MutantDetectionImpl implements MutantDetection {
+import com.meli.exams.mutants.services.MutantDetectionService;
+
+@Service
+public class MutantDetectionServiceImpl implements MutantDetectionService {
 
 	private static final String MUTANT_REGEX = "(A{4,}|T{4,}|C{4,}|G{4,})";
 	private static final Pattern MUTANT_PATTERN = Pattern.compile(MUTANT_REGEX);
