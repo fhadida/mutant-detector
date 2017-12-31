@@ -26,7 +26,9 @@ public class MutantDetectionImpl implements MutantDetection {
 			if (count >= MUTANT_THRESHOLD)
 				return true;
 			else {
+				LOG.info("DNA: " + Arrays.toString(dna));
 				final String[] dna_d1 = diagTopRightBotomLeft(dna);
+				LOG.info("DNA D1: " + Arrays.toString(dna_d1));
 				count += searchMutant(dna_d1);
 				if (count >= MUTANT_THRESHOLD)
 					return true;
@@ -46,7 +48,7 @@ public class MutantDetectionImpl implements MutantDetection {
 		StringBuffer[] sbArr = new StringBuffer[dna.length*2 - 1];
 		for (int i = 0; i < sbArr.length; i++) {
 			int k = i < dna.length ? 0 : i - dna.length + 1;
-			for (int j = k; j <= k - dna.length; j++) {
+			for (int j = k; j <= i - k; j++) {
 				int x = j,
 					y = (i - j);
 				if (sbArr[i] == null)
@@ -65,7 +67,7 @@ public class MutantDetectionImpl implements MutantDetection {
 		StringBuffer[] sbArr = new StringBuffer[dna.length*2 - 1];
 		for (int i = 0; i < sbArr.length; i++) {
 			int k = i < dna.length ? 0 : i - dna.length + 1;
-			for (int j = k; j <= k - dna.length; j++) {
+			for (int j = k; j <= i - k; j++) {
 				int x = j,
 					y = (dna.length - 1) - (i - j);
 				if (sbArr[i] == null)
