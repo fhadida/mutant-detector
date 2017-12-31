@@ -14,6 +14,7 @@ public class MutantDetectionImpl implements MutantDetection {
 	private static final String MUTANT_REGEX = "(A{4,}|T{4,}|C{4,}|G{4,})";
 	private static final Pattern MUTANT_PATTERN = Pattern.compile(MUTANT_REGEX);
 	private static final int MUTANT_THRESHOLD = 2;
+	private static final int MIN_REPETITIONS = 4;
 	
 	public boolean isMutant(String[] dna) {
 		validateDNA(dna);
@@ -26,9 +27,7 @@ public class MutantDetectionImpl implements MutantDetection {
 			if (count >= MUTANT_THRESHOLD)
 				return true;
 			else {
-				LOG.info("DNA: " + Arrays.toString(dna));
 				final String[] dna_d1 = diagTopRightBotomLeft(dna);
-				LOG.info("DNA D1: " + Arrays.toString(dna_d1));
 				count += searchMutant(dna_d1);
 				if (count >= MUTANT_THRESHOLD)
 					return true;
@@ -45,12 +44,14 @@ public class MutantDetectionImpl implements MutantDetection {
 	}
 
 	private static String[] diagTopLeftBotomRight(String[] dna) {
-		StringBuffer[] sbArr = new StringBuffer[dna.length*2 - 1];
-		for (int i = 0; i < sbArr.length; i++) {
-			int k = i < dna.length ? 0 : i - dna.length + 1;
-			for (int j = k; j <= i - k; j++) {
+		int n = (dna.length - MIN_REPETITIONS)*2 + 1;
+		StringBuffer[] sbArr = new StringBuffer[n];
+		for (int i = 0; i < n; i++) {
+			int l = (int) Math.ceil((double) dna.length/2);
+			int k = i < l ? 0 : i - l + 1;
+			for (int j = k; j < i + MIN_REPETITIONS - k; j++) {
 				int x = j,
-					y = (i - j);
+					y = (i + MIN_REPETITIONS - 1 - j);
 				if (sbArr[i] == null)
 					sbArr[i] = new StringBuffer();
 				sbArr[i].append(dna[x].charAt(y));
@@ -64,12 +65,14 @@ public class MutantDetectionImpl implements MutantDetection {
 	}
 
 	private static String[] diagTopRightBotomLeft(String[] dna) {
-		StringBuffer[] sbArr = new StringBuffer[dna.length*2 - 1];
-		for (int i = 0; i < sbArr.length; i++) {
-			int k = i < dna.length ? 0 : i - dna.length + 1;
-			for (int j = k; j <= i - k; j++) {
+		int n = (dna.length - MIN_REPETITIONS)*2 + 1;
+		StringBuffer[] sbArr = new StringBuffer[n];
+		for (int i = 0; i < n; i++) {
+			int l = (int) Math.ceil((double) dna.length/2);
+			int k = i < l ? 0 : i - l + 1;
+			for (int j = k; j < i + MIN_REPETITIONS - k; j++) {
 				int x = j,
-					y = (dna.length - 1) - (i - j);
+					y = (l - 1) - (i - j);
 				if (sbArr[i] == null)
 					sbArr[i] = new StringBuffer();
 				sbArr[i].append(dna[x].charAt(y));

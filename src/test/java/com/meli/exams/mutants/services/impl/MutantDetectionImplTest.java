@@ -1,7 +1,6 @@
 package com.meli.exams.mutants.services.impl;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -71,6 +70,15 @@ public class MutantDetectionImplTest {
 	}
 	
 	@Test
+	public void testIsMutantGivenMutantDNA7() {
+		String[] mutantDNA = { "ATGCGAG", "CAGGTCA", "TTATGTG", 
+				"AGTCGGG", "CTGCTAA", "TCACTGG", "TCAATGG"
+			};
+		boolean result = mutantDetection.isMutant(mutantDNA);
+		assertTrue(result);
+	}
+	
+	@Test
 	public void testIsMutantGivenNonMutantDNA1() {
 		String[] mutantDNA = { "ATGCGA", "CAGTGC", "TTATTT", "AGACGG", 
 				"GCGTCA", "TCACTG" };
@@ -92,20 +100,11 @@ public class MutantDetectionImplTest {
 		mutantDetection.isMutant(mutantDNA);
 	}
 	
-//	@Test
-	public void testRegex() {
-		final String regex = "(A{4,}|T{4,}|C{4,}|G{4,})";
-		final String string = "CAAAATGGGGTAAAATT";
-
-		final Pattern pattern = Pattern.compile(regex);
-		final Matcher matcher = pattern.matcher(string);
-
-		while (matcher.find()) {
-		    System.out.println("Full match: " + matcher.group(0));
-		    for (int i = 1; i <= matcher.groupCount(); i++) {
-		        System.out.println("Group " + i + ": " + matcher.group(i));
-		    }
-		}
+	@Test(expected = IllegalArgumentException.class)
+	public void testIsMutantGivenInvalidDNA3() {
+		String[] mutantDNA = { "ATTTT", "CARGT", "ATWAA", 
+				"CTTCG", "TCACT" };
+		mutantDetection.isMutant(mutantDNA);
 	}
 
 }
