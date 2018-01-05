@@ -12,18 +12,19 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.meli.exams.mutants.dto.DnaDto;
-import com.meli.exams.mutants.services.MutantDetectionService;
+import com.meli.exams.mutants.facades.MutantDetectionFacade;
 
 @RestController
 public class MutantDetectionController {
 	
 	private static final Logger LOG = LoggerFactory.getLogger(MutantDetectionController.class);
 
-	private MutantDetectionService mutantDetectionService;
+	private MutantDetectionFacade mutantDetectionFacade;
+	
 	
 	@RequestMapping(method=RequestMethod.POST, value="/mutant")
 	public ResponseEntity<?> mutant(@RequestBody DnaDto dnaDto) {
-		if (mutantDetectionService.isMutant(dnaDto.getDna())) {
+		if (getMutantDetectionFacade().isMutant(dnaDto)) {
 			return new ResponseEntity<>(HttpStatus.OK); 
 		} else {
 			return new ResponseEntity<>(HttpStatus.FORBIDDEN);
@@ -36,13 +37,16 @@ public class MutantDetectionController {
 		return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 	}
 
-	public MutantDetectionService getMutantDetectorService() {
-		return mutantDetectionService;
+	public MutantDetectionFacade getMutantDetectionFacade() {
+		return mutantDetectionFacade;
 	}
 
 	@Autowired
-	public void setMutantDetectorService(MutantDetectionService mutantDetectorService) {
-		this.mutantDetectionService = mutantDetectorService;
+	public void setMutantDetectionFacade(MutantDetectionFacade mutantDetectionFacade) {
+		this.mutantDetectionFacade = mutantDetectionFacade;
 	}
+	
+	
+
 	
 }
