@@ -6,8 +6,8 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonPropertyOrder({ "count_mutant_dna", "count_human_dna", "ratio" })
 public class StatsDto {
 
-	private int humans;
-	private int mutants;
+	private long humans;
+	private long mutants;
 	private double ratio;
 
 	
@@ -15,27 +15,27 @@ public class StatsDto {
 		super();
 	}
 
-	public StatsDto(int humans, int mutants, double ratio) {
+	public StatsDto(long humans, long mutants, double ratio) {
 		this.humans = humans;
 		this.mutants = mutants;
 		this.ratio = ratio;
 	}
 
 	@JsonProperty("count_human_dna")
-	public int getHumans() {
+	public long getHumans() {
 		return humans;
 	}
 
-	public void setHumans(int humans) {
+	public void setHumans(long humans) {
 		this.humans = humans;
 	}
 
 	@JsonProperty("count_mutant_dna")
-	public int getMutants() {
+	public long getMutants() {
 		return mutants;
 	}
 
-	public void setMutants(int mutants) {
+	public void setMutants(long mutants) {
 		this.mutants = mutants;
 	}
 

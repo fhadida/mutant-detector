@@ -2,40 +2,42 @@ package com.meli.exams.mutants.model;
 
 public class MutantStats {
 
-	private int total = 0;
-	private int mutants = 0;
+	private long total = 0;
+	private long mutants = 0;
 	
 	
 	public MutantStats() {
 		super();
 	}
 
-	public MutantStats(int total, int mutants) {
+	public MutantStats(long total, long mutants) {
 		this.total = total;
 		this.mutants = mutants;
 	}
 
-	public int getTotal() {
+	public long getTotal() {
 		return total;
 	}
 
-	public void setTotal(int total) {
+	public void setTotal(long total) {
 		this.total = total;
 	}
 
-	public int getMutants() {
+	public long getMutants() {
 		return mutants;
 	}
 
-	public void setMutants(int mutants) {
+	public void setMutants(long mutants) {
 		this.mutants = mutants;
 	}
 
-	public int getHumans() {
+	public long getHumans() {
 		return getTotal() - getMutants();
 	}
 	
 	public double getRatio() {
+		if (getHumans() == 0)
+			return Double.POSITIVE_INFINITY;
 		return (double) getMutants() / (double) getHumans();
 	}
 }

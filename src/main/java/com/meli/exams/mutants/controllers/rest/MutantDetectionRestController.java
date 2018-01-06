@@ -1,4 +1,4 @@
-package com.meli.exams.mutants.controllers;
+package com.meli.exams.mutants.controllers.rest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,9 +16,9 @@ import com.meli.exams.mutants.dto.StatsDto;
 import com.meli.exams.mutants.facades.MutantDetectionFacade;
 
 @RestController
-public class MutantDetectionController {
+public class MutantDetectionRestController {
 	
-	private static final Logger LOG = LoggerFactory.getLogger(MutantDetectionController.class);
+	private static final Logger LOG = LoggerFactory.getLogger(MutantDetectionRestController.class);
 
 	private MutantDetectionFacade mutantDetectionFacade;
 	
