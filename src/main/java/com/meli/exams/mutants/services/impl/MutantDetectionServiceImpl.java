@@ -12,11 +12,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.google.cloud.datastore.Datastore;
+import com.google.cloud.datastore.DatastoreException;
 import com.google.cloud.datastore.Entity;
 import com.google.cloud.datastore.Key;
 import com.google.cloud.datastore.KeyFactory;
+import com.google.cloud.datastore.Query;
+import com.google.cloud.datastore.QueryResults;
 import com.google.gson.Gson;
 import com.meli.exams.mutants.model.Dna;
+import com.meli.exams.mutants.model.MutantStats;
 import com.meli.exams.mutants.services.MutantDetectionService;
 
 @Service
@@ -25,19 +29,28 @@ public class MutantDetectionServiceImpl implements MutantDetectionService {
 	private static final Logger LOG = LoggerFactory.getLogger(MutantDetectionServiceImpl.class);
 	
 	private static final String MUTANT_REGEX = "(A{4}|T{4}|C{4}|G{4})";
-	
 	private static final Pattern MUTANT_PATTERN = Pattern.compile(MUTANT_REGEX);
-	
 	private static final int MUTANT_THRESHOLD = 2;
-	
 	private static final int MIN_REPETITIONS = 4;
 	
-	@Autowired
+	private static final String DNA_DATASTORE_KIND = "Dna";
+	
+	
 	private Datastore datastore;
 	
 	private KeyFactory dnaKeyFactory;
 	
 	
+	
+	@Autowired
+	public void setDatastore(Datastore datastore) {
+		this.datastore = datastore;
+	}
+	
+	public Datastore getDatastore() {
+		return datastore;
+	}
+
 	public boolean isMutant(String[] dna) {
 		validateDNA(dna);
 		LOG.debug("DNA to analyze: " + Arrays.toString(dna));
@@ -168,9 +181,6 @@ public class MutantDetectionServiceImpl implements MutantDetectionService {
 		
 	}
 
-	public Datastore getDatastore() {
-		return datastore;
-	}
 
 	public KeyFactory getDnaKeyFactory() {
 		return dnaKeyFactory;
@@ -179,13 +189,21 @@ public class MutantDetectionServiceImpl implements MutantDetectionService {
 	@PostConstruct
 	public void initializeKeyFactories() {
 		LOG.info("Initializing key factories");
-		dnaKeyFactory = getDatastore().newKeyFactory().setKind("Dna");
+		dnaKeyFactory = getDatastore().newKeyFactory().setKind(DNA_DATASTORE_KIND);
 	}
 	 
 	@Override
 	public Entity save(Dna dna) {
-		LOG.info(String.format("Saving DNA %d...", dna.hashCode()));
-		return getDatastore().put(createDnaEntity(dna));
+		Entity e = null;
+		try {
+			e = getDatastore().add(createDnaEntity(dna));
+			LOG.info(String.format("DNA %d saved successfully", dna.hashCode()));
+		} catch (DatastoreException ex) {
+			if ("ALREADY_EXISTS".equals(ex.getReason())) {
+				LOG.info("DNA Already exists!");
+			}
+		}
+		return e;
 	}
 
 	private Entity createDnaEntity(Dna dna) {
@@ -195,6 +213,24 @@ public class MutantDetectionServiceImpl implements MutantDetectionService {
 				.set("rawDna", gson.toJson(dna.getRawDna()))
 				.set("isMutant", dna.isMutant())
 				.build();
+	}
+
+	@Override
+	public MutantStats stats() {
+		Query<Entity> query = Query.newEntityQueryBuilder().setKind(DNA_DATASTORE_KIND).build();
+		QueryResults<Entity> results = getDatastore().run(query);
+		int mutantCount = 0,
+			totalCount = 0;
+		while (results.hasNext()) {
+			Entity e = results.next();
+			boolean isMutant = e.getBoolean("isMutant");
+			if (isMutant) {
+				mutantCount++;
+			}
+			totalCount++;
+		}
+		LOG.info(String.format("Total DNAs: %d, Total Mutants: %d", totalCount, mutantCount));
+		return new MutantStats(totalCount, mutantCount);
 	}
 
 }

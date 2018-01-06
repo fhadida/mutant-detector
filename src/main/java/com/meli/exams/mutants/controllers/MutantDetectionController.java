@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.meli.exams.mutants.dto.DnaDto;
+import com.meli.exams.mutants.dto.StatsDto;
 import com.meli.exams.mutants.facades.MutantDetectionFacade;
 
 @RestController
@@ -25,10 +26,15 @@ public class MutantDetectionController {
 	@RequestMapping(method=RequestMethod.POST, value="/mutant")
 	public ResponseEntity<?> mutant(@RequestBody DnaDto dnaDto) {
 		if (getMutantDetectionFacade().isMutant(dnaDto)) {
-			return new ResponseEntity<>(HttpStatus.OK); 
+			return ResponseEntity.ok().build(); 
 		} else {
-			return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+			return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
 		}		
+	}
+	
+	@RequestMapping(value="/stats")
+	public StatsDto stats() {
+		return getMutantDetectionFacade().stats();
 	}
 	
 	@ExceptionHandler(value=IllegalArgumentException.class)
