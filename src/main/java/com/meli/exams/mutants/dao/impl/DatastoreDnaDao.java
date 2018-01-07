@@ -54,7 +54,7 @@ public class DatastoreDnaDao implements DnaDao {
 	}
 	
 	@Override
-	public Entity save(Dna dna) {
+	public Long save(Dna dna) {
 		Entity e = null;
 		try {
 			e = getDatastore().add(createDnaEntity(dna));
@@ -64,7 +64,8 @@ public class DatastoreDnaDao implements DnaDao {
 				LOG.info("DNA Already exists!");
 			}
 		}
-		return e;
+		if (e == null || e.getKey() == null) return null;
+		else return e.getKey().getId();
 	}
 	
 	private Entity createDnaEntity(Dna dna) {

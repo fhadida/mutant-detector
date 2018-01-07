@@ -36,8 +36,8 @@ public class MutantStats {
 	}
 	
 	public double getRatio() {
-		if (getHumans() == 0)
-			return Double.POSITIVE_INFINITY;
+		if (getMutants() == 0) return 0d;
+		if (getHumans() == 0) return Double.POSITIVE_INFINITY;
 		return (double) getMutants() / (double) getHumans();
 	}
 }
