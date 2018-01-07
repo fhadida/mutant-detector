@@ -24,7 +24,7 @@ import com.meli.exams.mutants.dao.DnaDao;
 import com.meli.exams.mutants.model.Dna;
 import com.meli.exams.mutants.model.MutantStats;
 
-public class MutantDetectionServiceTest {
+public class MutantDetectionServiceImplTest {
 	
 	@Mock
 	DnaDao dnaDaoMock;
