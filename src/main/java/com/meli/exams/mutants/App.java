@@ -16,7 +16,6 @@ public class App {
     
     @Bean
     public Datastore cloudDatastoreService() {
-//    	return DatastoreOptions.getDefaultInstance().getService();
-    	return DatastoreOptions.newBuilder().setProjectId("mutants-detector").build().getService();
+    	return DatastoreOptions.getDefaultInstance().getService();
     }
 }
