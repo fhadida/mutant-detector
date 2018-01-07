@@ -11,9 +11,14 @@ public class DnaHelper {
 	public static String[] diagTopLeftBotomRight(String[] dna, int offset) {
 		int n = (dna.length - offset)*2 + 1;
 		StringBuffer[] sbArr = new StringBuffer[n];
+		int h = dna.length/2;
+		int k = 0;
 		for (int i = 0; i < n; i++) {
-			int l = (int) Math.ceil((double) dna.length/2);
-			int k = i < l ? 0 : i - l + 1;
+			if (h < offset) {
+				k = i < h ? 0 : i - h + 1;
+			} else {
+				k = i < (dna.length - h) + 1 ? 0 : i - (dna.length - h);
+			}
 			for (int j = k; j < i + offset - k; j++) {
 				int x = j,
 					y = (i + offset - 1 - j);
@@ -32,12 +37,17 @@ public class DnaHelper {
 	public static String[] diagTopRightBotomLeft(String[] dna, int offset) {
 		int n = (dna.length - offset)*2 + 1;
 		StringBuffer[] sbArr = new StringBuffer[n];
+		int h = dna.length/2;
+		int k = 0;
 		for (int i = 0; i < n; i++) {
-			int l = (int) Math.ceil((double) dna.length/2);
-			int k = i < l ? 0 : i - l + 1;
+			if (h < offset) {
+				k = i < h ? 0 : i - h + 1;
+			} else {
+				k = i < (dna.length - h) + 1 ? 0 : i - (dna.length - h);
+			}
 			for (int j = k; j < i + offset - k; j++) {
 				int x = j,
-					y = (l - 1) - (i - j);
+					y = (dna.length - offset) - (i - j);
 				if (sbArr[i] == null)
 					sbArr[i] = new StringBuffer();
 				sbArr[i].append(dna[x].charAt(y));
