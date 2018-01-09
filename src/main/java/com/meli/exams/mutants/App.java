@@ -4,8 +4,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
-import com.google.cloud.datastore.Datastore;
-import com.google.cloud.datastore.DatastoreOptions;
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
 
 @SpringBootApplication
 public class App {
@@ -15,8 +15,8 @@ public class App {
     }
     
     @Bean
-    public Datastore cloudDatastoreService() {
-//    	return DatastoreOptions.getDefaultInstance().getService();
-    	return DatastoreOptions.newBuilder().setProjectId("mutants-detector").build().getService();
-    }
+	public DatastoreService cloudDatastoreService() {
+		return DatastoreServiceFactory.getDatastoreService();
+	}
+    
 }
