@@ -2,7 +2,9 @@
 
 **Mutant Detector** es una API para detectar si un ADN es Mutante o no. Además, incluye un servicio (´/stats´) para conocer las estadísticas de los ADNs ingresados.
 
-## Servicio para saber si un ADN es mutante o no.
+## Modo de Uso
+
+### Servicio para saber si un ADN es mutante o no.
 
 * **URL**
   
@@ -18,7 +20,7 @@
 
   *JSON Schema:*
 	
-```json
+  ```json
   {
     "description": "Representación de la cadena de ADN",
     "type": "object",
@@ -30,15 +32,15 @@
       } 
     }
   }
-```
+  ```
 
   *Ejemplo:*
   
-```json
+  ```json
   {
     "dna":["ATGCGA","CAGTGC","TTATGT","AGAAGG","CCCCTA","TCACTG"]
   }
-```
+  ```
 
 
 * **Respuestas**
@@ -47,7 +49,7 @@
     * Http Code: `403`    *- en cualquier otro caso*
 
 
-## Consultar estadisticas
+### Consultar estadisticas
 
 * **URL**
   
@@ -86,4 +88,4 @@
      
 ## URL
 
-  [https://mutants-detector.appspot.com/]
+  <https://mutants-detector.appspot.com/>
