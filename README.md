@@ -4,7 +4,7 @@
 
 ## Modo de Uso
 
-***Solo en ambientes Google App Engine con Datastore***
+***Solo en ambientes Google App Engine con Datastore y Java 8***
 1. Clonar el repositorio.
 2. `cd` al directorio del proyecto recien clonado.
 3. Ejecutar `mvn clean appengine:run` para correr la aplicacion o `mvn clean appengine:deploy` para hacer el despliegue en *Google App Engine*
