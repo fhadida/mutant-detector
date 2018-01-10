@@ -4,6 +4,11 @@
 
 ## Modo de Uso
 
+***Solo en ambientes Google App Engine con Datastore***
+1. Clonar el repositorio.
+2. `cd` al directorio del proyecto recien clonado.
+3. Ejecutar `mvn clean appengine:run` para correr la aplicacion o `mvn clean appengine:deploy` para hacer el despliegue en *Google App Engine*
+
 ### Servicio para saber si un ADN es mutante o no.
 
 * **URL**
