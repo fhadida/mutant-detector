@@ -49,7 +49,7 @@
     * Http Code: `403`    *- en cualquier otro caso*
 
 
-### Consultar estadisticas
+### Servicio para consultar estadísticas
 
 * **URL**
   

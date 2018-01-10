@@ -2,6 +2,8 @@ package com.meli.exams.mutants.dao.impl;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.Random;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -11,6 +13,7 @@ import org.mockito.MockitoAnnotations;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
+import com.meli.exams.mutants.helpers.DnaTestHelper;
 import com.meli.exams.mutants.model.Dna;
 
 public class DatastoreDnaDaoTest {
@@ -69,6 +72,27 @@ public class DatastoreDnaDaoTest {
 		dao.save(nonMutantDna);
 		
 		assertEquals(2, dao.total());
+	}
+	
+	@Test
+	public void testSaveMassive() {
+		assertEquals(0, dao.total());
+		Dna dna = null;
+		Random r = new Random();
+		int nonMutants = 1500,
+			mutants = 60;
+		for (int i = 0; i < nonMutants; i++) {
+			int size = r.ints(4, 100).findFirst().getAsInt();
+			dna = new Dna(DnaTestHelper.generateRandomDNA(size), false);
+			dao.save(dna);
+		}
+		for (int i = 0; i < mutants; i++) {
+			int size = r.ints(4, 100).findFirst().getAsInt();
+			dna = new Dna(DnaTestHelper.generateRandomDNA(size), true);
+			dao.save(dna);
+		}
+		assertEquals(nonMutants + mutants, dao.total());
+		assertEquals(mutants, dao.countMutants());
 	}
 	
 	@Test

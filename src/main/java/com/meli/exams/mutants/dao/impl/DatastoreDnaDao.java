@@ -13,7 +13,7 @@ import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
-
+import com.google.appengine.api.datastore.Text;
 import com.meli.exams.mutants.dao.DnaDao;
 import com.meli.exams.mutants.model.Dna;
 
@@ -56,7 +56,8 @@ public class DatastoreDnaDao implements DnaDao {
 	private Entity createDnaEntity(Dna dna) throws JsonProcessingException {
 		Entity e = new Entity(DNA_DATASTORE_KIND, dna.hashCode());
 		ObjectMapper mapper = new ObjectMapper();
-		e.setProperty(RAWDNA_FIELD, mapper.writeValueAsString(dna.getRawDna()));
+		Text rawDna = new Text(mapper.writeValueAsString(dna.getRawDna()));
+		e.setUnindexedProperty(RAWDNA_FIELD, rawDna);
 		e.setProperty(ISMUTANT_FIELD, dna.isMutant());
 		return e;
 	}
