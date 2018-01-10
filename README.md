@@ -1,6 +1,6 @@
 # Mutant Detector
 
-**Mutant Detector** es una API para detectar si un ADN es Mutante o no. Además, incluye un servicio (´/stats´) para conocer las estadísticas de los ADNs ingresados.
+**Mutant Detector** es una API para detectar si un ADN es Mutante o no. Además, incluye un servicio (`/stats`) para conocer las estadísticas de los ADNs ingresados.
 
 ## Modo de Uso
 
@@ -62,29 +62,30 @@
 * **Respuesta**
 
     * Http Code: `200`
+    
       Content: 
       
-     ```json
-     {
-       "description": "Representación de las estadisticas",
-       "type": "object",
-       "properties": {
-         "count_mutant_dna": { "type": "number" },
-         "count_human_dna": { "type": "number" },
-         "ratio": { "type": "number" }
-       }
-     }
-     ```
+      ```json
+      {
+        "description": "Representación de las estadisticas",
+        "type": "object",
+        "properties": {
+          "count_mutant_dna": { "type": "number" },
+          "count_human_dna": { "type": "number" },
+          "ratio": { "type": "number" }
+        }
+      }
+      ```
      
-     *Ejemplo:*
+      *Ejemplo:*
   
-     ```json
-     {
-       "count_mutant_dna": 40,
-       "count_human_dna": 100,
-       "ratio": 0.4
-     }
-     ```
+      ```json
+      {
+        "count_mutant_dna": 40,
+        "count_human_dna": 100,
+        "ratio": 0.4
+      }
+      ```
      
 ## URL
 
