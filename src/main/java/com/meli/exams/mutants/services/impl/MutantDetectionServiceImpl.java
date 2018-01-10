@@ -1,7 +1,6 @@
 package com.meli.exams.mutants.services.impl;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -96,13 +95,11 @@ public class MutantDetectionServiceImpl implements MutantDetectionService {
 
 	@Override
 	public MutantStats stats() {
-		final List<Dna> dnaList = getDnaDao().getAll();
-		final long mutantCount = dnaList.stream()
-				.filter(dna -> dna.isMutant())
-				.count();
+		final long total = getDnaDao().total(), 
+				   mutants = getDnaDao().countMutants();
 		
-		LOG.info(String.format("Total DNAs: %d, Total Mutants: %d", dnaList.size(), mutantCount));
-		return new MutantStats(dnaList.size(), mutantCount);
+		LOG.info(String.format("Total DNAs: %d, Total Mutants: %d", total, mutants));
+		return new MutantStats(total, mutants);
 	}
 
 }

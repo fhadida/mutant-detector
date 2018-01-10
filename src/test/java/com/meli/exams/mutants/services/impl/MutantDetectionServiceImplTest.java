@@ -1,5 +1,6 @@
 package com.meli.exams.mutants.services.impl;
 
+import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
@@ -8,12 +9,7 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.hamcrest.Matchers.equalTo;
 
-import java.util.Arrays;
-import java.util.List;
-
-import org.assertj.core.util.Lists;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -156,16 +152,8 @@ public class MutantDetectionServiceImplTest {
 	
 	@Test
 	public void testStatsMixedDnas() {
-		String[] dummyRawDna = new String[1];
-		List<Dna> dummyDnaList = Arrays.asList(
-					new Dna(dummyRawDna, true),
-					new Dna(dummyRawDna, true),
-					new Dna(dummyRawDna, false),
-					new Dna(dummyRawDna, false),
-					new Dna(dummyRawDna, false),
-					new Dna(dummyRawDna, false)
-				);
-		when(dnaDaoMock.getAll()).thenReturn(dummyDnaList);
+		when(dnaDaoMock.countMutants()).thenReturn(Long.valueOf(2));
+		when(dnaDaoMock.total()).thenReturn(Long.valueOf(6));
 		MutantStats mutantStats = mutantDetectionService.stats();
 		
 		assertEquals(4, mutantStats.getHumans());
@@ -176,16 +164,8 @@ public class MutantDetectionServiceImplTest {
 	
 	@Test
 	public void testStatsNoMutantsDna() {
-		String[] dummyRawDna = new String[1];
-		List<Dna> dummyDnaList = Arrays.asList(
-					new Dna(dummyRawDna, false),
-					new Dna(dummyRawDna, false),
-					new Dna(dummyRawDna, false),
-					new Dna(dummyRawDna, false),
-					new Dna(dummyRawDna, false),
-					new Dna(dummyRawDna, false)
-				);
-		when(dnaDaoMock.getAll()).thenReturn(dummyDnaList);
+		when(dnaDaoMock.countMutants()).thenReturn(Long.valueOf(0));
+		when(dnaDaoMock.total()).thenReturn(Long.valueOf(6));
 		MutantStats mutantStats = mutantDetectionService.stats();
 		
 		assertEquals(6, mutantStats.getHumans());
@@ -196,16 +176,8 @@ public class MutantDetectionServiceImplTest {
 	
 	@Test
 	public void testStatsNoHumansDna() {
-		String[] dummyRawDna = new String[1];
-		List<Dna> dummyDnaList = Arrays.asList(
-					new Dna(dummyRawDna, true),
-					new Dna(dummyRawDna, true),
-					new Dna(dummyRawDna, true),
-					new Dna(dummyRawDna, true),
-					new Dna(dummyRawDna, true),
-					new Dna(dummyRawDna, true)
-				);
-		when(dnaDaoMock.getAll()).thenReturn(dummyDnaList);
+		when(dnaDaoMock.countMutants()).thenReturn(Long.valueOf(6));
+		when(dnaDaoMock.total()).thenReturn(Long.valueOf(6));
 		MutantStats mutantStats = mutantDetectionService.stats();
 		
 		assertEquals(0, mutantStats.getHumans());
@@ -216,8 +188,8 @@ public class MutantDetectionServiceImplTest {
 	
 	@Test
 	public void testStatsNoDnas() {
-		List<Dna> dummyDnaList = Lists.emptyList();
-		when(dnaDaoMock.getAll()).thenReturn(dummyDnaList);
+		when(dnaDaoMock.countMutants()).thenReturn(Long.valueOf(0));
+		when(dnaDaoMock.total()).thenReturn(Long.valueOf(0));
 		MutantStats mutantStats = mutantDetectionService.stats();
 		
 		assertEquals(0, mutantStats.getHumans());
