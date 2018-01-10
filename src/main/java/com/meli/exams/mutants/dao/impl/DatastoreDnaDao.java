@@ -46,7 +46,7 @@ public class DatastoreDnaDao implements DnaDao {
 			key = getDatastore().put(dnaEntity);
 			LOG.info(String.format("DNA %d saved successfully", dna.hashCode()));
 		} catch (JsonProcessingException e) {
-			LOG.error("No fue posible guardar el ADN: " + e.getLocalizedMessage(), e);
+			LOG.error("Not able to store DNA: " + e.getLocalizedMessage(), e);
 		}
 		
 		if (key == null) return null;
