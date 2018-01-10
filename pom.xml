@@ -78,6 +78,11 @@
             <version>${appengine.sdk.version}</version>
             <scope>test</scope>
         </dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-tomcat</artifactId>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 
 	<build>

@@ -21,6 +21,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.meli.exams.mutants.dto.DnaDto;
 import com.meli.exams.mutants.dto.StatsDto;
 import com.meli.exams.mutants.facades.MutantDetectionFacade;
@@ -29,10 +30,16 @@ public class MutantDetectionRestControllerTest {
 	
 	private MockMvc mockMvc;
 	
-	@Mock MutantDetectionFacade facade;
+	@Mock
+	MutantDetectionFacade facadeMock;
 	
-	@InjectMocks MutantDetectionRestController controller;
+	@InjectMocks
+	private MutantDetectionRestController controller;
+	
+	private ObjectMapper jsonMapper = new ObjectMapper();
+	
 
+	
 	@Before
 	public void setUp() throws Exception {
 		MockitoAnnotations.initMocks(this);
@@ -45,24 +52,41 @@ public class MutantDetectionRestControllerTest {
 
 	@Test
 	public void testMutantWithMutantDNA() throws Exception {
-		when(facade.isMutant(any(DnaDto.class))).thenReturn(Boolean.TRUE);
-		mockMvc.perform(post("/mutant"))
+		DnaDto mutantDnaDto = new DnaDto(new String[] { "CCCC", "CCCC", "CCCC", "CCCC" });
+		when(facadeMock.isMutant(any(DnaDto.class))).thenReturn(true);
+		mockMvc.perform(post("/mutant")
+				.contentType(MediaType.APPLICATION_JSON_UTF8)
+				.content(jsonMapper.writeValueAsBytes(mutantDnaDto)))
 			.andExpect(status().isOk());
-		verify(facade, times(1)).isMutant(any(DnaDto.class));
+		verify(facadeMock, times(1)).isMutant(any(DnaDto.class));
 	}
 	
 	@Test
 	public void testMutantWithNonMutantDNA() throws Exception {
-		when(facade.isMutant(any(DnaDto.class))).thenReturn(Boolean.FALSE);
-		mockMvc.perform(post("/mutant"))
+		DnaDto nonMutantDnaDto = new DnaDto(new String[] { "CTTC", "ACCC", "CCGG", "ACGC" });
+		when(facadeMock.isMutant(any(DnaDto.class))).thenReturn(false);
+		mockMvc.perform(post("/mutant")
+				.contentType(MediaType.APPLICATION_JSON_UTF8)
+				.content(jsonMapper.writeValueAsBytes(nonMutantDnaDto)))
 			.andExpect(status().isForbidden());
-		verify(facade, times(1)).isMutant(any(DnaDto.class));
+		verify(facadeMock, times(1)).isMutant(any(DnaDto.class));
+	}
+	
+	@Test
+	public void testMutantWithInvalidDNA() throws Exception {
+		DnaDto invalidDnaDto = new DnaDto(new String[] { "XXXX", "ACCC", "CCGG", "ACGC" });
+		when(facadeMock.isMutant(any(DnaDto.class))).thenThrow(new IllegalArgumentException("oops!"));
+		mockMvc.perform(post("/mutant")
+				.contentType(MediaType.APPLICATION_JSON_UTF8)
+				.content(jsonMapper.writeValueAsBytes(invalidDnaDto)))
+			.andExpect(status().isForbidden());
+		verify(facadeMock, times(1)).isMutant(any(DnaDto.class));
 	}
 
 	@Test
 	public void testStats() throws Exception {
 		StatsDto stats = new StatsDto(8, 2, 2d/8d);
-		when(facade.stats()).thenReturn(stats);
+		when(facadeMock.stats()).thenReturn(stats);
 		
 		mockMvc.perform(get("/stats"))
 			.andExpect(status().isOk())
@@ -71,7 +95,7 @@ public class MutantDetectionRestControllerTest {
 			.andExpect(jsonPath("$.count_mutant_dna", equalTo(2)))
 			.andExpect(jsonPath("$.ratio", equalTo(2d/8d)));
 		
-		verify(facade, times(1)).stats();
+		verify(facadeMock, times(1)).stats();
 	}
 
 
